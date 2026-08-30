@@ -11,7 +11,10 @@ const originalLocalStorage = Object.getOwnPropertyDescriptor(
   window,
   "localStorage",
 );
-const originalMatchMedia = window.matchMedia;
+const originalMatchMedia = Object.getOwnPropertyDescriptor(
+  window,
+  "matchMedia",
+);
 const originalStartViewTransition = Object.getOwnPropertyDescriptor(
   document,
   "startViewTransition",
@@ -90,10 +93,11 @@ describe("theme system", () => {
       delete (window as unknown as Record<string, unknown>).localStorage;
     }
 
-    Object.defineProperty(window, "matchMedia", {
-      configurable: true,
-      value: originalMatchMedia,
-    });
+    if (originalMatchMedia) {
+      Object.defineProperty(window, "matchMedia", originalMatchMedia);
+    } else {
+      delete (window as unknown as Record<string, unknown>).matchMedia;
+    }
 
     if (originalStartViewTransition) {
       Object.defineProperty(

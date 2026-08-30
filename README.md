@@ -2,9 +2,7 @@
 
 The frontend foundation for JM Technologies, an upcoming technology company focused on helping clients discover and engage suitable technology services. This repository will become JM's official website, portfolio, and project-enquiry platform.
 
-The current scope is deliberately limited to application scaffolding, a dual-theme visual foundation, routing, reusable interface primitives, automated tests, and developer tooling. Finished page designs, approved company content, contact handling, case studies, and AI-assistant functionality have not yet been implemented.
-
----
+The current scope is deliberately limited to application scaffolding, a dual-theme visual foundation, routing, styling foundations, reusable interface primitives, automated tests, and developer tooling. Finished page designs, approved company content, contact handling, case studies, and AI-assistant functionality have not yet been implemented.
 
 ## Technology stack
 
@@ -16,8 +14,6 @@ The current scope is deliberately limited to application scaffolding, a dual-the
 - Local Inter, Space Grotesk, and IBM Plex Mono font packages
 - ESLint and Prettier
 - Vitest, React Testing Library, jest-dom, user-event, and jsdom
-
----
 
 ## Prerequisites
 
