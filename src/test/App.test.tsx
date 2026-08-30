@@ -48,8 +48,6 @@ describe("JM Technologies application", () => {
       screen.getByRole("link", { name: "Return to the homepage" }),
     ).toHaveAttribute("href", "/");
   });
-<<<<<<< HEAD
-=======
 
   it("renders the internal design-system preview route", () => {
     renderApp("/__design-system");
@@ -59,5 +57,4 @@ describe("JM Technologies application", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("Internal preview / v0.1")).toBeInTheDocument();
   });
->>>>>>> james
 });

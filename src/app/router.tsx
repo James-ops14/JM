@@ -2,10 +2,7 @@ import { createBrowserRouter, type RouteObject } from "react-router";
 import { SiteLayout } from "@/components/layout/SiteLayout";
 import { AboutPage } from "@/pages/about/AboutPage";
 import { ContactPage } from "@/pages/contact/ContactPage";
-<<<<<<< HEAD
-=======
 import { DesignSystemPreviewPage } from "@/pages/DesignSystemPreviewPage";
->>>>>>> james
 import { HomePage } from "@/pages/home/HomePage";
 import { PrivacyPage } from "@/pages/legal/PrivacyPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
@@ -25,10 +22,7 @@ export const appRoutes: RouteObject[] = [
       { path: "team", Component: TeamPage },
       { path: "contact", Component: ContactPage },
       { path: "privacy", Component: PrivacyPage },
-<<<<<<< HEAD
-=======
       { path: "__design-system", Component: DesignSystemPreviewPage },
->>>>>>> james
       { path: "*", Component: NotFoundPage },
     ],
   },
