@@ -1,4 +1,8 @@
 import { NavLink, Outlet } from "react-router";
+<<<<<<< HEAD
+=======
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
+>>>>>>> james
 
 const navigationItems = [
   { to: "/", label: "Home", end: true },
@@ -20,6 +24,7 @@ export function SiteLayout() {
         <NavLink className="site-name" to="/" aria-label="JM Technologies home">
           JM Technologies
         </NavLink>
+<<<<<<< HEAD
         <nav aria-label="Primary navigation">
           <ul className="navigation-list">
             {navigationItems.map(({ to, label, ...options }) => (
@@ -37,6 +42,28 @@ export function SiteLayout() {
             ))}
           </ul>
         </nav>
+=======
+        <div className="site-header-actions">
+          <nav aria-label="Primary navigation">
+            <ul className="navigation-list">
+              {navigationItems.map(({ to, label, ...options }) => (
+                <li key={to}>
+                  <NavLink
+                    className={({ isActive }) =>
+                      isActive ? "navigation-link active" : "navigation-link"
+                    }
+                    to={to}
+                    {...options}
+                  >
+                    {label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <ThemeToggle />
+        </div>
+>>>>>>> james
       </header>
 
       <main id="main-content" className="site-main" tabIndex={-1}>

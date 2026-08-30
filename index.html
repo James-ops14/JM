@@ -7,7 +7,42 @@
       name="description"
       content="JM Technologies frontend foundation and company portfolio."
     />
+<<<<<<< HEAD
     <title>JM Technologies</title>
+=======
+    <meta name="theme-color" content="#F7F7F4" />
+    <title>JM Technologies</title>
+    <script>
+      (() => {
+        const storageKey = "jm-theme";
+        const lightTheme = "light";
+        const darkTheme = "dark";
+        let storedTheme = null;
+
+        try {
+          storedTheme = window.localStorage.getItem(storageKey);
+        } catch {
+          // Storage can be unavailable in privacy-restricted browser contexts.
+        }
+
+        const theme =
+          storedTheme === lightTheme || storedTheme === darkTheme
+            ? storedTheme
+            : window.matchMedia?.("(prefers-color-scheme: dark)").matches
+              ? darkTheme
+              : lightTheme;
+
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        document
+          .querySelector('meta[name="theme-color"]')
+          ?.setAttribute(
+            "content",
+            theme === darkTheme ? "#07080D" : "#F7F7F4",
+          );
+      })();
+    </script>
+>>>>>>> james
   </head>
   <body>
     <div id="root"></div>
