@@ -21,20 +21,35 @@ describe("JM Technologies application", () => {
     renderApp();
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "JM Technologies" }),
+      screen.getByRole("heading", {
+        level: 1,
+        name: /where ideas become intelligent/i,
+      }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("navigation", { name: "Primary navigation" }),
     ).toBeInTheDocument();
   });
 
-  it("navigates to a secondary route", async () => {
+  it("navigates to a homepage section through an accessible anchor", async () => {
     const { user } = renderApp();
 
     await user.click(screen.getByRole("link", { name: "About" }));
 
     expect(
-      screen.getByRole("heading", { level: 1, name: "About JM" }),
+      screen.getByRole("heading", {
+        level: 2,
+        name: /bridge between human ambition/i,
+      }),
+    ).toBeInTheDocument();
+    expect(window.location.hash).toBe("#about");
+  });
+
+  it("redirects legacy major-page routes to the homepage narrative", () => {
+    renderApp("/services");
+
+    expect(
+      screen.getByRole("heading", { level: 1, name: /where ideas become/i }),
     ).toBeInTheDocument();
   });
 

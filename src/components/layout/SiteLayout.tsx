@@ -1,44 +1,64 @@
+import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router";
+import { ConvergenceBackground } from "@/components/layout/ConvergenceBackground";
+import { ScrollNavigation } from "@/components/layout/ScrollNavigation";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
-const navigationItems = [
-  { to: "/", label: "Home", end: true },
-  { to: "/about", label: "About" },
-  { to: "/services", label: "Services" },
-  { to: "/portfolio", label: "Portfolio" },
-  { to: "/team", label: "Team" },
-  { to: "/contact", label: "Contact" },
-] as const;
-
 export function SiteLayout() {
+  const [isHeaderRetracted, setIsHeaderRetracted] = useState(false);
+
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+    const timeout = window.setTimeout(
+      () => document.getElementById(hash)?.scrollIntoView(),
+      0,
+    );
+    return () => window.clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    let previousScrollY = window.scrollY;
+
+    function handleScroll() {
+      const currentScrollY = window.scrollY;
+      setIsHeaderRetracted(
+        currentScrollY > 120 && currentScrollY > previousScrollY,
+      );
+      previousScrollY = currentScrollY;
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <div className="site-shell">
+      <ConvergenceBackground />
       <a className="skip-link" href="#main-content">
         Skip to main content
       </a>
+      <div
+        aria-hidden="true"
+        className="header-reveal-zone"
+        onPointerEnter={() => setIsHeaderRetracted(false)}
+      />
 
-      <header className="site-header">
-        <NavLink className="site-name" to="/" aria-label="JM Technologies home">
+      <header
+        className={
+          isHeaderRetracted ? "site-header is-retracted" : "site-header"
+        }
+        onPointerEnter={() => setIsHeaderRetracted(false)}
+      >
+        <NavLink
+          className="site-name"
+          to="/#home"
+          aria-label="JM Technologies home"
+        >
           JM Technologies
         </NavLink>
         <div className="site-header-actions">
-          <nav aria-label="Primary navigation">
-            <ul className="navigation-list">
-              {navigationItems.map(({ to, label, ...options }) => (
-                <li key={to}>
-                  <NavLink
-                    className={({ isActive }) =>
-                      isActive ? "navigation-link active" : "navigation-link"
-                    }
-                    to={to}
-                    {...options}
-                  >
-                    {label}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <ScrollNavigation />
           <ThemeToggle />
         </div>
       </header>
