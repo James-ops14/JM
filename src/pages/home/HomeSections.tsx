@@ -1,19 +1,82 @@
+import { useState } from "react";
+import jamesPortrait from "@/assets/images/james.png";
+import jamesPortraitOptimized from "@/assets/images/james-640.jpg";
+import morganPortrait from "@/assets/images/morgan.png";
+import {
+  company,
+  contact,
+  processSteps,
+  projects,
+  services,
+  team,
+} from "@/content/site";
 import { Badge } from "@/components/ui/Badge";
 import { ButtonLink } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import jamesPortrait from "@/assets/images/james.png";
-import morganPortrait from "@/assets/images/morgan.png";
 
-const services = [
-  "Web experiences",
-  "Custom software",
-  "Business automation",
-  "Systems integration",
-];
-const process = ["Discover", "Design", "Develop", "Evolve"];
+function ContactActions() {
+  const [copyStatus, setCopyStatus] = useState<"copied" | "unavailable" | null>(
+    null,
+  );
+
+  async function copyPhoneNumber() {
+    try {
+      if (!navigator.clipboard?.writeText) {
+        throw new Error("Clipboard API unavailable");
+      }
+      await navigator.clipboard.writeText(contact.phoneDisplay);
+    } catch {
+      const textArea = document.createElement("textarea");
+      textArea.value = contact.phoneDisplay;
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.append(textArea);
+      textArea.select();
+      const copied = document.execCommand?.("copy") ?? false;
+      textArea.remove();
+      if (!copied) {
+        setCopyStatus("unavailable");
+        return;
+      }
+    }
+    setCopyStatus("copied");
+    window.setTimeout(() => setCopyStatus(null), 2500);
+  }
+
+  return (
+    <div className="contact-actions">
+      <a className="button button-primary" href={contact.phoneHref}>
+        Call JM
+      </a>
+      <a
+        className="button button-secondary"
+        href={contact.whatsappHref}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        Chat on WhatsApp
+      </a>
+      <button
+        className="button button-ghost"
+        onClick={() => {
+          void copyPhoneNumber();
+        }}
+        type="button"
+      >
+        Copy phone number
+      </button>
+      <p aria-live="polite" className="copy-status">
+        {copyStatus === "copied"
+          ? "Phone number copied."
+          : copyStatus === "unavailable"
+            ? "Copy is unavailable in this browser. Please select the number manually."
+            : null}
+      </p>
+    </div>
+  );
+}
 
 export function HomeSections() {
   return (
@@ -21,54 +84,63 @@ export function HomeSections() {
       <Section className="home-hero" id="home" spacing="generous" tabIndex={-1}>
         <Container>
           <p className="technical-label">
-            JM / Digital experiences in formation
+            JM · Digital products, design and intelligent systems
           </p>
           <h1 className="hero-title">
-            Where ideas become intelligent digital experiences.
+            We turn ambitious ideas into intelligent digital experiences.
           </h1>
           <p className="hero-copy">
-            JM is building a considered technology practice for organisations
-            exploring clearer, more capable digital systems.
+            JM brings product thinking, design and engineering together to
+            create useful websites, software platforms, automation systems and
+            emerging digital products.
           </p>
           <div className="hero-actions">
-            <ButtonLink to="/#contact">Start a conversation</ButtonLink>
-            <a className="text-link" href="/#services">
-              Explore capabilities <span aria-hidden="true">↘</span>
+            <ButtonLink to="/#contact">Start a project</ButtonLink>
+            <a className="text-link" href="/#portfolio">
+              Explore our work
             </a>
           </div>
+          <p className="scroll-cue">Scroll to explore</p>
         </Container>
       </Section>
 
       <Section className="story-section story-about" id="about" tabIndex={-1}>
         <Container narrow>
-          <SectionHeading
-            eyebrow="01 / About JM"
-            title="A thoughtful bridge between human ambition and intelligent systems."
-          />
-          <p className="provisional-copy">
-            Provisional company narrative — approved company story and
-            positioning will be added here.
-          </p>
+          <SectionHeading eyebrow="01 / About JM" title={company.about.title} />
+          <div className="editorial-copy">
+            {company.about.paragraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
+          <div className="mission-vision">
+            <div>
+              <p className="technical-label">Our mission</p>
+              <p>{company.about.mission}</p>
+            </div>
+            <div>
+              <p className="technical-label">Our vision</p>
+              <p>{company.about.vision}</p>
+            </div>
+          </div>
         </Container>
       </Section>
 
       <Section className="story-section" id="services" tabIndex={-1}>
         <Container>
           <SectionHeading
-            eyebrow="02 / Capabilities"
-            title="Technology services shaped around real operational needs."
-            description="Initial capability groups; detailed service content remains in development."
+            description="JM brings together product strategy, design and engineering so clients can move from an early idea to a solution people can actually use."
+            eyebrow="02 / Services"
+            title="From the first idea to a working digital product."
           />
-          <div className="capability-grid">
+          <div className="service-list">
             {services.map((service, index) => (
-              <Card key={service} variant={index % 2 ? "default" : "elevated"}>
-                <p className="technical-label">Capability / 0{index + 1}</p>
-                <h3>{service}</h3>
-                <p>
-                  Provisional scope to be defined with approved client and
-                  delivery requirements.
-                </p>
-              </Card>
+              <article className="service-item" key={service.title}>
+                <span aria-hidden="true">0{index + 1}</span>
+                <div>
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
+                </div>
+              </article>
             ))}
           </div>
         </Container>
@@ -77,22 +149,44 @@ export function HomeSections() {
       <Section className="story-section ai-section" id="ai" tabIndex={-1}>
         <Container>
           <div className="asymmetric-grid">
-            <SectionHeading
-              eyebrow="03 / AI + Automation"
-              title="Intelligence should make work more human, not less."
-            />
             <div>
-              <p className="provisional-copy">
-                This future capability area will explore responsible automation,
-                intelligent workflows, and AI-supported experiences. No AI
-                product is implemented here.
-              </p>
-              <div className="badge-row">
-                <Badge tone="violet">Human direction</Badge>
-                <Badge tone="cyan">System clarity</Badge>
-                <Badge>Secure by design</Badge>
+              <SectionHeading
+                eyebrow="03 / Intelligence with purpose"
+                title="AI should make technology more useful—not less human."
+              />
+              <div className="editorial-copy">
+                <p>
+                  JM explores artificial intelligence as a practical layer
+                  within digital products: helping people find information,
+                  navigate services, reduce repetitive work and make better use
+                  of the systems around them.
+                </p>
+                <p>
+                  Our approach begins with the problem, the user and the
+                  information that can be trusted. The technology comes
+                  afterward.
+                </p>
               </div>
             </div>
+            <aside
+              aria-label="JM assistant concept preview"
+              className="ai-preview"
+            >
+              <div className="ai-preview-heading">
+                <Badge tone="violet">Concept preview</Badge>
+                <span>Nonfunctional navigation preview</span>
+              </div>
+              <p>Choose a prompt to explore the relevant JM section.</p>
+              <div className="prompt-list">
+                <a href="/#services">
+                  I need a website for a growing organisation.
+                </a>
+                <a href="/#services">
+                  How can I automate a repetitive process?
+                </a>
+                <a href="/#portfolio">Show me products JM is developing.</a>
+              </div>
+            </aside>
           </div>
         </Container>
       </Section>
@@ -104,19 +198,23 @@ export function HomeSections() {
       >
         <Container>
           <SectionHeading
-            eyebrow="04 / Selected work"
-            title="Case studies will make the process visible."
-            description="Selected projects are awaiting approved publication."
+            description="JM’s portfolio is growing alongside the company. These concepts represent the kinds of human problems, product thinking and technical systems we are interested in pursuing."
+            eyebrow="04 / Portfolio"
+            title="Ideas we are developing into meaningful products."
           />
           <div className="project-grid">
-            {[
-              "Project field / 01",
-              "Project field / 02",
-              "Project field / 03",
-            ].map((label) => (
-              <article className="project-placeholder" key={label}>
-                <p className="technical-label">{label}</p>
-                <p>Reserved for an approved case study.</p>
+            {projects.map((project, index) => (
+              <article
+                className={`project-preview project-preview-${index + 1}`}
+                key={project.title}
+              >
+                <div aria-hidden="true" className="project-visual">
+                  <span />
+                </div>
+                <p className="technical-label">{project.category}</p>
+                <h3>{project.title}</h3>
+                <Badge tone="cyan">{project.status}</Badge>
+                <p>{project.description}</p>
               </article>
             ))}
           </div>
@@ -126,15 +224,15 @@ export function HomeSections() {
       <Section className="story-section" id="process" tabIndex={-1}>
         <Container>
           <SectionHeading
-            eyebrow="05 / Working process"
-            title="Direction becomes momentum through deliberate steps."
+            eyebrow="05 / Process"
+            title="A clear path from problem to product."
           />
           <ol className="process-list">
-            {process.map((step, index) => (
-              <li key={step}>
+            {processSteps.map((step, index) => (
+              <li key={step.title}>
                 <span>0{index + 1}</span>
-                <h3>{step}</h3>
-                <p>Provisional process stage.</p>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
               </li>
             ))}
           </ol>
@@ -144,49 +242,48 @@ export function HomeSections() {
       <Section className="story-section team-section" id="team" tabIndex={-1}>
         <Container>
           <SectionHeading
+            align="center"
             eyebrow="06 / Team"
             title="The people building JM."
-            align="center"
           />
-          <p className="provisional-copy centered">
-            JM is being shaped by a small founding team combining product
-            thinking, design and software engineering.
-          </p>
           <div className="team-grid">
-            <article className="team-member">
-              <div className="team-portrait team-portrait-james">
-                <img
-                  alt="James, Co-founder and Product Lead at JM"
-                  height="960"
-                  loading="lazy"
-                  src={jamesPortrait}
-                  width="720"
-                />
-              </div>
-              <div className="team-member-copy">
-                <p className="technical-label">Founder / 01</p>
-                <h3>James</h3>
-                <p>Co-founder &amp; Product Lead</p>
-                <span>Full-stack Engineer</span>
-              </div>
-            </article>
-            <article className="team-member">
-              <div className="team-portrait team-portrait-morgan">
-                <img
-                  alt="Morgan, Co-founder, Designer and Frontend Engineer at JM"
-                  height="960"
-                  loading="lazy"
-                  src={morganPortrait}
-                  width="720"
-                />
-              </div>
-              <div className="team-member-copy">
-                <p className="technical-label">Founder / 02</p>
-                <h3>Morgan</h3>
-                <p>Co-founder</p>
-                <span>Designer · Frontend Engineer</span>
-              </div>
-            </article>
+            {[jamesPortrait, morganPortrait].map((image, index) => {
+              const member = team[index];
+              return (
+                <article className="team-member" key={member.name}>
+                  <div className="team-portrait">
+                    {index === 0 ? (
+                      <picture>
+                        <source
+                          srcSet={jamesPortraitOptimized}
+                          type="image/jpeg"
+                        />
+                        <img
+                          alt={member.alt}
+                          height="1846"
+                          loading="lazy"
+                          src={image}
+                          width="852"
+                        />
+                      </picture>
+                    ) : (
+                      <img
+                        alt={member.alt}
+                        height="405"
+                        loading="lazy"
+                        src={image}
+                        width="365"
+                      />
+                    )}
+                  </div>
+                  <div className="team-member-copy">
+                    <h3>{member.name}</h3>
+                    <p>{member.role}</p>
+                    <span>{member.speciality}</span>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </Container>
       </Section>
@@ -200,15 +297,14 @@ export function HomeSections() {
         <Container narrow>
           <p className="technical-label">07 / Contact</p>
           <h2 className="contact-title">
-            Bring the next useful idea into focus.
+            Let’s talk about what you want to build.
           </h2>
           <p className="hero-copy">
-            A secure project-enquiry experience will be added once its
-            requirements are approved.
+            Whether you are starting with an early idea or improving an existing
+            digital product, tell us what you are working on and where you need
+            support.
           </p>
-          <ButtonLink to="/privacy" variant="secondary">
-            View privacy approach
-          </ButtonLink>
+          <ContactActions />
         </Container>
       </Section>
     </>

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { NavLink, Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 import { ConvergenceBackground } from "@/components/layout/ConvergenceBackground";
 import { ScrollNavigation } from "@/components/layout/ScrollNavigation";
+import { SiteFooter } from "@/components/layout/SiteFooter";
+import { Monogram } from "@/components/ui/Monogram";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export function SiteLayout() {
@@ -19,17 +21,23 @@ export function SiteLayout() {
 
   useEffect(() => {
     let previousScrollY = window.scrollY;
-
+    let frame = 0;
     function handleScroll() {
-      const currentScrollY = window.scrollY;
-      setIsHeaderRetracted(
-        currentScrollY > 120 && currentScrollY > previousScrollY,
-      );
-      previousScrollY = currentScrollY;
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        const currentScrollY = window.scrollY;
+        setIsHeaderRetracted(
+          currentScrollY > 160 && currentScrollY > previousScrollY,
+        );
+        previousScrollY = currentScrollY;
+        frame = 0;
+      });
     }
-
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   return (
@@ -38,34 +46,27 @@ export function SiteLayout() {
       <a className="skip-link" href="#main-content">
         Skip to main content
       </a>
-      <div
-        aria-hidden="true"
-        className="header-reveal-zone"
-        onPointerEnter={() => setIsHeaderRetracted(false)}
-      />
-
       <header
         className={
           isHeaderRetracted ? "site-header is-retracted" : "site-header"
         }
-        onPointerEnter={() => setIsHeaderRetracted(false)}
       >
-        <NavLink
-          className="site-name"
-          to="/#home"
-          aria-label="JM Technologies home"
-        >
-          JM Technologies
-        </NavLink>
+        <Link aria-label="JM home" className="site-name" to="/#home">
+          <Monogram label="JM temporary monogram" />
+          <span>JM</span>
+        </Link>
         <div className="site-header-actions">
+          <a className="header-project-link" href="/#contact">
+            Start a project
+          </a>
           <ScrollNavigation />
           <ThemeToggle />
         </div>
       </header>
-
       <main id="main-content" className="site-main" tabIndex={-1}>
         <Outlet />
       </main>
+      <SiteFooter />
     </div>
   );
 }
