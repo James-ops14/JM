@@ -83,24 +83,43 @@ export function HomeSections() {
     <>
       <Section className="home-hero" id="home" spacing="generous" tabIndex={-1}>
         <Container>
-          <p className="technical-label">
-            JM · Digital products, design and intelligent systems
-          </p>
-          <h1 className="hero-title">
-            We turn ambitious ideas into intelligent digital experiences.
-          </h1>
-          <p className="hero-copy">
-            JM brings product thinking, design and engineering together to
-            create useful websites, software platforms, automation systems and
-            emerging digital products.
-          </p>
-          <div className="hero-actions">
-            <ButtonLink to="/#contact">Start a project</ButtonLink>
-            <a className="text-link" href="/#portfolio">
-              Explore our work
-            </a>
+          <div className="hero-intro">
+            <p className="technical-label">JM / Independent technology studio</p>
+            <span className="hero-index">01 — 07</span>
           </div>
-          <p className="scroll-cue">Scroll to explore</p>
+          <div className="hero-stage">
+            <div className="hero-copy-block">
+              <h1 className="hero-title">
+                We turn ambitious ideas into intelligent digital experiences.
+              </h1>
+              <p className="hero-copy">
+                JM brings product thinking, design and engineering together to
+                create useful websites, software platforms, automation systems and
+                emerging digital products.
+              </p>
+              <div className="hero-actions">
+                <ButtonLink to="/#contact">Start a project</ButtonLink>
+                <a className="text-link" href="/#portfolio">
+                  Explore our work <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </div>
+            <div aria-hidden="true" className="hero-object">
+              <div className="hero-object-shadow" />
+              <div className="hero-object-orbit hero-object-orbit-one" />
+              <div className="hero-object-orbit hero-object-orbit-two" />
+              <div className="hero-object-core">
+                <span className="hero-object-mark">JM</span>
+                <span className="hero-object-caption">Ideas / made useful</span>
+              </div>
+              <span className="hero-object-dot hero-object-dot-one" />
+              <span className="hero-object-dot hero-object-dot-two" />
+            </div>
+          </div>
+          <div className="hero-footer">
+            <p>Digital products / design / intelligent systems</p>
+            <p className="scroll-cue">Scroll to explore <span aria-hidden="true">↓</span></p>
+          </div>
         </Container>
       </Section>
 
