@@ -96,6 +96,30 @@ Vite embeds every `VITE_*` value in browser-delivered code. **Never put API keys
 
 The application has minimal verification pages for `/`, `/about`, `/services`, `/portfolio`, `/team`, `/contact`, and `/privacy`, plus a not-found route. The internal `/__design-system` route previews foundational tokens and primitives. Public route pages remain scaffolding and are not representative of the final JM design.
 
+## Deployment
+
+JM is configured for deployment on **Netlify**.
+
+| Setting               | Value                   |
+| --------------------- | ----------------------- |
+| Production branch     | `main`                  |
+| Base directory        | Repository root         |
+| Build command         | `npm run build`         |
+| Publish directory     | `dist`                  |
+| Environment variables | None currently required |
+
+The deployment workflow is:
+
+1. Develop on a feature or working branch.
+2. Push the branch to GitHub.
+3. Review the Netlify Deploy Preview.
+4. Merge approved changes into `main`.
+5. Netlify automatically creates the production deployment.
+
+The `netlify.toml` SPA fallback redirects unresolved application paths to `index.html`. React Router then handles routes such as `/privacy`, `/about`, `/services`, `/ai`, `/portfolio`, `/process`, `/team`, and `/contact`.
+
+A Netlify subdomain may be used initially. A verified custom domain can be connected later; no Netlify site name, URL, or custom domain has been configured in this repository.
+
 ## Project status
 
 The engineering and first visual-system foundations are in place. Brand strategy approval, content modelling, production application shell, public page design, integrations, and deployment decisions remain pending. Verified company email and social profiles are not currently available and are intentionally omitted.
